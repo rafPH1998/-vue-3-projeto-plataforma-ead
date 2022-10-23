@@ -41,9 +41,19 @@
                         <form action="/dist/index.html" method="">
                             <div class="groupForm">
                                 <i class="far fa-envelope"></i>
-                                <input type="email" name="email" placeholder="Email" required>
+                                <input type="email" name="email" v-model="email" placeholder="Email" required>
                             </div>
-                            <button class="btn primary" type="submit">Recuperar</button>
+                            <button 
+                                :class="[
+                                    'btn',
+                                    'primary',
+                                    loading ? 'loading' : ''
+                                ]" 
+                                @click.prevent="forgetPassword()"
+                                type="submit">
+                                <span v-if="loading">Verificando...</span>
+                                <span v-else>Recuperar</span>
+                            </button>
                         </form>
                         <span>
                             <p class="fontSmall">Acessar? 
@@ -61,7 +71,34 @@
 </template>
 
 <script>
+import { useStore } from 'vuex';
+import { ref } from 'vue';
+
 export default {
-  name: "ForgetPasswordView",
+    name: "ForgetPasswordView",
+
+    setup(){
+        const store = useStore()
+        const email = ref('')
+        const loading = ref(false)
+
+        const forgetPassword = () => {
+            loading.value = true
+
+            store.dispatch('forgetPassword', {
+                email: email.value
+            })
+            .then(() => alert('deu certo'))
+            .catch(() => alert('Error'))
+            .finally(() => loading.value = false)
+        }
+
+        return {
+            forgetPassword,
+            loading,
+            email
+        }
+        
+    }
 };
 </script>
