@@ -1,4 +1,5 @@
 import AuthServices from '@/services/AuthServices';
+import PasswordResetServices from '@/services/PasswordResetServices';
 
 export default {
 
@@ -29,8 +30,13 @@ export default {
     actions: {
         //aqui tenho que receber no 1 parametro um commit que permite chamar um muttation
         auth ({ state }, params) {
-            console.log(state.loggedIn)
-            AuthServices.auth(params)
+            state.user
+            return AuthServices.auth(params)
+        },
+
+        forgetPassword ({state}, params) {
+            state.user
+            return PasswordResetServices.forgetPassword(params)
         }
     },
 
